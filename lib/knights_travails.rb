@@ -20,6 +20,17 @@ class KnightsTravails
     @board = generate_board
   end
 
+  def knight_moves(start_pos, target)
+    return unless VERTICES.include?(start_pos) && VERTICES.include?(target)
+
+    start_node = find_node(start_pos)
+    start_node.update_path("end")
+
+    determine_shortest_path(start_node, target)
+  end
+
+  private
+
   def generate_board
     VERTICES.map { |vertex| Node.new(vertex) }
   end
@@ -30,22 +41,13 @@ class KnightsTravails
     end
   end
 
-  def knight_moves(start_pos, target)
-    return unless VERTICES.include?(start_pos) && VERTICES.include?(target)
-
-    start_node = find_node(start_pos)
-    start_node.update_path("end")
-
-    determine_path(start_node, target)
-  end
-
-  def determine_path(starting_node, target) # rubocop: disable Metrics/MethodLength
+  def determine_shortest_path(starting_node, target) # rubocop: disable Metrics/MethodLength
     queue = [starting_node]
 
     until queue.empty?
       current_node = queue.shift
 
-      return shortest_path(current_node) if current_node.coords == target
+      return shortest_path_from(current_node) if current_node.coords == target
 
       possible_next_moves = find_next_moves(current_node.coords)
       possible_next_moves.compact.each do |node|
@@ -57,30 +59,27 @@ class KnightsTravails
     end
   end
 
-  def shortest_path(current_node)
-    shortest_path = find_shortest_path(current_node)
+  # returns shortest path from target assuming shortest path has
+  # been made by linking nodes iteratively back to starting position
+  def shortest_path_from(target_node)
+    path_arr = []
+    current_node = target_node
+
+    until current_node == "end"
+      path_arr << current_node.coords
+      current_node = current_node.prev_move
+    end
+
+    puts "You made it in #{path_arr.size - 1} moves! Here's your path: "
+    path_arr.reverse!.each { |coord| print "#{coord} \n" }
+
     reset_board
-    shortest_path
+    path_arr
   end
 
   def find_next_moves(coord)
     KNIGHT_MOVE_DIRS.map do |dir|
       find_node([coord[0] + dir[0], coord[1] + dir[1]])
-    end
-  end
-
-  def find_shortest_path(target)
-    path_arr = []
-    node = target
-
-    until node == "end"
-      path_arr << node.coords
-      node = node.prev_move
-    end
-
-    puts "You made it in #{path_arr.size - 1} moves! Here's your path: "
-    path_arr.reverse.each do |coord|
-      print  "#{coord} \n"
     end
   end
 
