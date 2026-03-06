@@ -3,9 +3,9 @@
 class Node
   attr_accessor :coords, :prev_move
 
-  def initialize(coordinate)
+  def initialize(coordinate, prev_move = nil)
     @coords = coordinate
-    @prev_move = nil
+    @prev_move = prev_move
   end
 
   def update_path(prev_move)

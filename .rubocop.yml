@@ -9,9 +9,6 @@
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
-plugins:
-  - rubocop-performance
-
 AllCops:
   NewCops: enable
 
