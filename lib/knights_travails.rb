@@ -26,7 +26,10 @@ class KnightsTravails
     start_node = find_node(start_pos)
     start_node.update_path("end")
 
-    determine_shortest_path(start_node, target)
+    path_arr = determine_shortest_path(start_node, target)
+
+    puts "You made it in #{path_arr.size - 1} moves! Here's your path: "
+    path_arr.reverse!.each { |coord| print "#{coord} \n" }
   end
 
   private
@@ -69,9 +72,6 @@ class KnightsTravails
       path_arr << current_node.coords
       current_node = current_node.prev_move
     end
-
-    puts "You made it in #{path_arr.size - 1} moves! Here's your path: "
-    path_arr.reverse!.each { |coord| print "#{coord} \n" }
 
     reset_board
     path_arr
