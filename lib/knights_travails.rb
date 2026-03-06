@@ -29,7 +29,7 @@ class KnightsTravails
     path_arr = determine_shortest_path(start_node, target)
 
     puts "You made it in #{path_arr.size - 1} moves! Here's your path: "
-    path_arr.reverse!.each { |coord| print "#{coord} \n" }
+    path_arr.each { |coord| print "#{coord} \n" }
   end
 
   private
@@ -74,7 +74,7 @@ class KnightsTravails
     end
 
     reset_board
-    path_arr
+    path_arr.reverse!
   end
 
   def find_next_moves(coord)
